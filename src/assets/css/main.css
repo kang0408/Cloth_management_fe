@@ -1,0 +1,11 @@
+@import "./font.css";
+
+* {
+  font-family: var(--font-open-sans);
+}
+a {
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+}
