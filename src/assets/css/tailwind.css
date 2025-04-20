@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
 @theme {
   --color-primary-100: rgba(3, 169, 245, 0.2);
   --color-primary-200: rgba(3, 169, 245, 0.4);
@@ -19,4 +20,13 @@
 
   --font-baloo-2: "Baloo 2", "sans-serif";
   --font-open-sans: "Open Sans", "sans-serif";
+}
+
+:root {
+  --ui-primary: var(--color-primary-500);
+  --reka-navigation-menu-viewport-width: 500;
+  /* --ui-bg-elevated: none; */
+  /* --ui-text-muted: var(--color-black); */
+  /* --ui-text-dimmed: var(--color-black); */
+  /* --ui-text-highlighted: var(--color-primary-500); */
 }

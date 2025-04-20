@@ -1,8 +1,14 @@
 <script setup>
-import { UButton } from "@nuxt/ui";
+import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
 </script>
 
 <template>
-  <h1 class="text-primary-500 text-3xl font-bold">Trang chủ</h1>
-  <UButton color="neutral" variant="outline">Button</UButton>
+  <UApp>
+    <Header />
+    <div class="mt-24">
+      <router-view></router-view>
+    </div>
+    <Footer />
+  </UApp>
 </template>
