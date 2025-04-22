@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import SlideShow from "../components/Home/SlideShow.vue";
+</script>
 
 <template>
-  <h1 class="text-xl">Home</h1>
+  <SlideShow />
 </template>
 
 <style lang="scss" scoped></style>

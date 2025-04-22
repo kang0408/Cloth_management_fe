@@ -40,6 +40,12 @@ export default defineConfig({
         button: {
           compoundVariants: [
             {
+              color: "primary",
+              variant: "solid",
+              class:
+                "border-2 font-medium border-primary-500 hover:text-primary-500 hover:bg-white rounded-none"
+            },
+            {
               color: "neutral",
               variant: "link",
               class: "hover:text-(--color-primary-500)"
@@ -50,6 +56,22 @@ export default defineConfig({
           slots: {
             overley: "z-[90]",
             content: "z-[100]"
+          }
+        },
+        carousel: {
+          slots: {
+            root: "m-0 w-full h-full",
+            viewport: "w-full h-full",
+            container: "h-full",
+            item: "h-full",
+            dots: "bottom-2"
+          },
+          variants: {
+            active: {
+              true: {
+                dot: "bg-(--color-primary-500)"
+              }
+            }
           }
         }
       }

@@ -74,7 +74,7 @@ const toggleNavMobileHandler = (label) => {
 
 <template>
   <header
-    class="fixed top-0 right-0 left-0 z-30 mx-auto flex items-center justify-between gap-5 border-b-1 border-[#ccc] px-4 py-4 shadow-md backdrop-blur sm:justify-around sm:py-2"
+    class="fixed top-0 right-0 left-0 z-30 mx-auto flex items-center justify-between gap-5 border-b-1 border-[#ccc] px-4 py-4 shadow-md backdrop-blur-lg sm:justify-around sm:py-2"
   >
     <!-- Logo -->
     <div class="w-14 sm:w-20">
@@ -152,7 +152,7 @@ const toggleNavMobileHandler = (label) => {
     </div>
   </header>
   <div
-    class="fixed top-22 right-0 left-0 z-10 border-b-1 border-[#ccc] p-2 shadow-md backdrop-blur sm:hidden"
+    class="fixed top-22 right-0 left-0 z-10 border-b-1 border-[#ccc] p-2 shadow-md backdrop-blur-lg sm:hidden"
     v-if="toggleNavMobile"
   >
     <UNavigationMenu :items="navOptionsMobile" orientation="vertical">
