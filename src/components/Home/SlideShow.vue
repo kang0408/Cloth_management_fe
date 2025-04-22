@@ -25,7 +25,14 @@ const items = ref([
 
 <template>
   <div class="h-[60vh] sm:h-[70vh] lg:h-[89vh]">
-    <UCarousel v-slot="{ item }" dots :items="items" loop :autoplay="{ delay: 3000 }">
+    <UCarousel
+      v-slot="{ item }"
+      dots
+      :items="items"
+      loop
+      :autoplay="{ delay: 3000 }"
+      :ui="{ dots: 'bottom-2' }"
+    >
       <img
         :src="item.img"
         class="h-full w-full object-cover object-[55%_0] sm:object-[45%_0] lg:object-center"

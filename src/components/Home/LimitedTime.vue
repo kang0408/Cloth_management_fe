@@ -5,14 +5,14 @@ const { countdown } = useCountdown("Aug 18, 2025 00:00:00");
 </script>
 
 <template>
-  <div class="relative">
-    <img src="/home/limit-timer.jpg" alt="" />
+  <div class="relative h-98">
+    <img src="/home/limit-timer.jpg" alt="" class="h-full w-full object-cover" />
     <div class="absolute top-1/2 left-1/2 flex -translate-1/2 flex-col items-center">
       <p class="text-primary-500 text-center text-xl font-medium">
         Get <span class="text-red-500">70%</span> off to your order
       </p>
       <p class="text-center text-3xl font-bold">Limited Time Offer!</p>
-      <div class="my-8 flex justify-center gap-12">
+      <div class="my-8 flex justify-center gap-6 sm:gap-12">
         <p class="text-center text-3xl leading-6 font-bold">
           {{ countdown.days }}<br /><span class="text-gray text-xs font-normal">DAYS</span>
         </p>

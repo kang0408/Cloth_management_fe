@@ -49,6 +49,11 @@ export default defineConfig({
               color: "neutral",
               variant: "link",
               class: "hover:text-(--color-primary-500)"
+            },
+            {
+              color: "neutral",
+              variant: "outline",
+              class: "pointer-cursor hover:ring-primary-500 hover:bg-primary-500 hover:text-white"
             }
           ]
         },
@@ -63,8 +68,7 @@ export default defineConfig({
             root: "m-0 w-full h-full",
             viewport: "w-full h-full",
             container: "h-full",
-            item: "h-full",
-            dots: "bottom-2"
+            item: "h-full"
           },
           variants: {
             active: {

@@ -29,7 +29,7 @@ const cateList = ref([
 
 <template>
   <div class="flex flex-col items-center px-4 sm:px-5 md:px-25 lg:px-40">
-    <p class="mb-8 text-4xl font-bold sm:mb-10">Categories</p>
+    <p class="mb-8 text-center text-4xl font-bold sm:mb-10">Categories</p>
     <div
       class="flex flex-col gap-8 sm:flex-row sm:flex-wrap sm:justify-between lg:flex-nowrap lg:justify-normal"
     >
