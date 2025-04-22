@@ -54,8 +54,8 @@ export default defineConfig({
         },
         modal: {
           slots: {
-            overley: "z-[90]",
-            content: "z-[100]"
+            overlay: "z-50 fixed",
+            content: "z-[51]"
           }
         },
         carousel: {

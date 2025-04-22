@@ -24,14 +24,14 @@ const items = ref([
 </script>
 
 <template>
-  <div class="h-[60vh] sm:h-[70vh] lg:h-[85vh]">
-    <UCarousel v-slot="{ item }" dots :items="items" loop>
+  <div class="h-[60vh] sm:h-[70vh] lg:h-[89vh]">
+    <UCarousel v-slot="{ item }" dots :items="items" loop :autoplay="{ delay: 3000 }">
       <img
         :src="item.img"
         class="h-full w-full object-cover object-[55%_0] sm:object-[45%_0] lg:object-center"
       />
       <div
-        class="absolute top-1/2 ml-2 w-[15rem] -translate-y-1/2 sm:ml-5 sm:w-sm lg:ml-40 lg:w-xl"
+        class="absolute top-1/2 ml-4 w-[15rem] -translate-y-1/2 sm:ml-5 sm:w-sm md:ml-25 lg:ml-40 lg:w-xl"
       >
         <p class="text-primary-500 mb-2 text-xl font-medium sm:mb-4 sm:text-3xl lg:text-4xl">
           {{ item.title }}

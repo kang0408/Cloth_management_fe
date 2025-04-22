@@ -6,7 +6,7 @@ import Footer from "./components/Footer.vue";
 <template>
   <UApp>
     <Header />
-    <div class="mt-21 sm:mt-18 lg:mt-21">
+    <div>
       <router-view></router-view>
     </div>
     <Footer />
