@@ -1,10 +1,10 @@
 <script setup>
-import SlideShow from "../components/Home/SlideShow.vue";
-import Categories from "../components/Home/Categories/index.vue";
-import Collections from "../components/Home/Collections/index.vue";
-import Services from "../components/Home/Services/index.vue";
-import LimitedTime from "../components/Home/LimitedTime.vue";
-import FeaturedProducts from "../components/Home/Featured.vue";
+import SlideShow from "../../components/Home/SlideShow.vue";
+import Categories from "../../components/Home/Categories/index.vue";
+import Collections from "../../components/Home/Collections/index.vue";
+import Services from "../../components/Home/Services/index.vue";
+import LimitedTime from "../../components/Home/LimitedTime.vue";
+import FeaturedProducts from "../../components/Home/Featured.vue";
 </script>
 
 <template>
