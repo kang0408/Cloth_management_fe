@@ -34,11 +34,13 @@ const navOptionsMobile = ref([
       children: [
         {
           label: "Profile",
-          icon: "i-lucide-user"
+          icon: "i-lucide-user",
+          to: "profile/infor"
         },
         {
           label: "Wishlist",
-          icon: "tabler:heart"
+          icon: "tabler:heart",
+          to: "profile/wishlist"
         },
         {
           label: "Logout",
@@ -52,11 +54,13 @@ const navOptionsMobile = ref([
 const userOptions = ref([
   {
     label: "Profile",
-    icon: "i-lucide-user"
+    icon: "i-lucide-user",
+    to: "profile/infor"
   },
   {
     label: "Wishlist",
-    icon: "tabler:heart"
+    icon: "tabler:heart",
+    to: "profile/wishlist"
   },
   {
     label: "Logout",

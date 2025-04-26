@@ -5,10 +5,15 @@ import AuthLayout from "../layouts/AuthLayout.vue";
 
 import Home from "../pages/Main/Home.vue";
 import Products from "../pages/Main/Products.vue";
+import Profile from "../pages/Main/Profile.vue";
+
 import Login from "../pages/Auth/Login.vue";
 import Register from "../pages/Auth/Register.vue";
 import ForgotPassword from "../pages/Auth/ForgotPassword.vue";
 import ChangePassword from "../pages/Auth/ChangePassword.vue";
+
+import Infor from "../components/Profile/Infor.vue";
+import Wishlist from "../components/Profile/Wishlist.vue";
 
 const routes = [
   {
@@ -24,6 +29,21 @@ const routes = [
         path: "products",
         name: "Products list",
         component: Products
+      },
+      {
+        path: "profile",
+        name: "Profile",
+        component: Profile,
+        children: [
+          {
+            path: "infor",
+            component: Infor
+          },
+          {
+            path: "wishlist",
+            component: Wishlist
+          }
+        ]
       }
     ]
   },
