@@ -1,6 +1,8 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const state = reactive({
   userName: undefined,
   email: undefined,
@@ -27,6 +29,14 @@ async function onSubmit(event) {
   <div
     class="login-wrap border-primary-200 w-full rounded-md border-1 bg-white p-6 shadow-xl sm:w-2/3 sm:p-8 md:w-1/2 lg:w-1/4"
   >
+    <UButton
+      color="neutral"
+      variant="outline"
+      icon="ion:arrow-back-outline"
+      size="md"
+      class="text-gray mb-6 rounded-full"
+      @click="router.back()"
+    />
     <p class="text-xl font-bold">Register</p>
     <p class="text-gray border-primary-200 mb-6 border-b-1 pb-4 text-xs">
       There's lots of fun in Register.
@@ -52,7 +62,7 @@ async function onSubmit(event) {
         <UCheckbox label="I agree to the Terms & Conditions" v-model="state.check" required />
       </UFormField>
 
-      <UButton type="submit" class="rounded-md"> Register </UButton>
+      <UButton type="submit" class="w-full justify-center rounded-md lg:w-fit"> Register </UButton>
 
       <p class="text-gray text-xs">
         Have an account?

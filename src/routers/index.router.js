@@ -7,6 +7,8 @@ import Home from "../pages/Main/Home.vue";
 import Products from "../pages/Main/Products.vue";
 import Login from "../pages/Auth/Login.vue";
 import Register from "../pages/Auth/Register.vue";
+import ForgotPassword from "../pages/Auth/ForgotPassword.vue";
+import ChangePassword from "../pages/Auth/ChangePassword.vue";
 
 const routes = [
   {
@@ -38,6 +40,16 @@ const routes = [
         path: "register",
         name: "Register",
         component: Register
+      },
+      {
+        path: "forgot-password",
+        name: "Forgot Password",
+        component: ForgotPassword
+      },
+      {
+        path: "change-password",
+        name: "Change Password",
+        component: ChangePassword
       }
     ]
   }

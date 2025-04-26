@@ -1,6 +1,8 @@
 <script setup>
 import { reactive } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const state = reactive({
   email: undefined,
   password: undefined
@@ -23,6 +25,15 @@ async function onSubmit(event) {
   <div
     class="login-wrap border-primary-200 w-full rounded-md border-1 bg-white p-6 shadow-xl sm:w-2/3 sm:p-8 md:w-1/2 lg:w-1/4"
   >
+    <UButton
+      color="neutral"
+      variant="outline"
+      icon="ion:arrow-back-outline"
+      size="md"
+      class="text-gray mb-6 rounded-full"
+      @click="router.back()"
+    />
+
     <p class="text-xl font-bold">Login</p>
     <p class="text-gray border-primary-200 mb-6 border-b-1 pb-4 text-xs">
       Everything is simple with Login.
@@ -39,12 +50,12 @@ async function onSubmit(event) {
         class="login-option flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-0"
       >
         <UCheckbox label="Keep me signed in" />
-        <router-link to="/auth/register" class="hover:text-primary-500 text-gray text-xs"
+        <router-link to="/auth/forgot-password" class="hover:text-primary-500 text-gray text-xs"
           >Forgot password?</router-link
         >
       </div>
 
-      <UButton type="submit" class="rounded-md"> Login </UButton>
+      <UButton type="submit" class="w-full justify-center rounded-md lg:w-fit"> Login </UButton>
 
       <p class="text-gray text-xs">
         Don't have an account?
