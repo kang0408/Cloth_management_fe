@@ -6,6 +6,7 @@ import AuthLayout from "../layouts/AuthLayout.vue";
 import Home from "../pages/Main/Home.vue";
 import Products from "../pages/Main/Products.vue";
 import Profile from "../pages/Main/Profile.vue";
+import Cart from "../pages/Main/Cart.vue";
 
 import Login from "../pages/Auth/Login.vue";
 import Register from "../pages/Auth/Register.vue";
@@ -29,6 +30,11 @@ const routes = [
         path: "products",
         name: "Products list",
         component: Products
+      },
+      {
+        path: "cart",
+        name: "Cart",
+        component: Cart
       },
       {
         path: "profile",

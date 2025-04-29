@@ -1,6 +1,8 @@
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const navOptions = ref([
   [
     {
@@ -118,7 +120,13 @@ const toggleNavMobileHandler = (label) => {
       >
         <UButton icon="mdi:user" size="md" color="neutral" variant="link" />
       </UDropdownMenu>
-      <UButton icon="mdi:cart" size="md" color="neutral" variant="link">
+      <UButton
+        icon="mdi:cart"
+        size="md"
+        color="neutral"
+        variant="link"
+        @click="router.push('cart')"
+      >
         <template #trailing>
           <UBadge label="44" variant="subtle" size="sm" />
         </template>
