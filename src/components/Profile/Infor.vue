@@ -1,23 +1,46 @@
 <script setup>
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
+import { useUserStore } from "../../stores/User/user.store";
+import { storeToRefs } from "pinia";
 
+const userStore = useUserStore();
+const { profile } = storeToRefs(userStore);
 const state = reactive({
-  username: "Kangtran4804",
-  email: "kangtran4804@gmail.com"
+  username: "",
+  email: ""
 });
 
+const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 const validate = (state) => {
   const errors = [];
-  //   if (!state.username) errors.push({ name: "username", message: "Required" });
-  //   if (!state.email) errors.push({ name: "email", message: "Required" });
+  if (!state.username) errors.push({ name: "username", message: "Required" });
+  if (state.username.length < 5)
+    errors.push({ name: "username", message: "Username is too short" });
+  if (state.username.length > 20)
+    errors.push({ name: "username", message: "Username exceeds 20 characters" });
+  if (!state.email) errors.push({ name: "email", message: "Required" });
+  if (!gmailRegex.test(state.email)) errors.push({ name: "email", message: "Invalid email" });
   return errors;
 };
 
 const toast = useToast();
-async function onSubmit(event) {
-  toast.add({ title: "Success", description: "The form has been submitted.", color: "success" });
-  console.log(event.data);
+async function onSubmit() {
+  const formData = new FormData();
+  formData.append("username", state.username);
+  formData.append("email", state.email);
+  try {
+    const res = await userStore.updateProfile(formData);
+    if (res.success) toast.add({ title: "Success", description: res.message, color: "success" });
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
+  }
 }
+
+onMounted(() => {
+  state.username = profile.value.username;
+  state.email = profile.value.email;
+  console.log(userStore.profile);
+});
 </script>
 <template>
   <div>

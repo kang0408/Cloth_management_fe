@@ -1,24 +1,42 @@
 <script setup>
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "../../stores/User/auth.store";
 
+const authStore = useAuthStore();
+const route = useRoute();
 const router = useRouter();
 const state = reactive({
   email: undefined,
   password: undefined
 });
 
+const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+const passwordRegex = /^(?=.*[0-9])(?=.*[A-Za-z])\S{8,}$/;
+
 const validate = (state) => {
   const errors = [];
   if (!state.email) errors.push({ name: "email", message: "Required" });
+  if (!gmailRegex.test(state.email)) errors.push({ name: "email", message: "Invalid email" });
   if (!state.password) errors.push({ name: "password", message: "Required" });
+  if (!passwordRegex.test(state.password))
+    errors.push({
+      name: "password",
+      message: "Password must be at least 8 characters long and contain both letters and numbers"
+    });
   return errors;
 };
 
 const toast = useToast();
 async function onSubmit(event) {
-  toast.add({ title: "Success", description: "The form has been submitted.", color: "success" });
-  console.log(event.data);
+  try {
+    await authStore.login(state.email, state.password);
+    const redirectPath = route.query.redirect || "/";
+    router.push(redirectPath);
+    toast.add({ title: "Success", description: "Login successfully", color: "success" });
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
+  }
 }
 </script>
 <template>

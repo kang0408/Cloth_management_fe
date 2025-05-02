@@ -1,7 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/User/auth.store";
 
+const authStore = useAuthStore();
+const { token: authStoreToken } = storeToRefs(authStore);
 const router = useRouter();
 const navOptions = ref([
   [
@@ -10,25 +14,38 @@ const navOptions = ref([
       to: "/products"
     },
     {
-      label: "About Us"
+      label: "About Us",
+      to: "/about-us"
     },
     {
-      label: "Contact Us"
+      label: "Contact Us",
+      to: "/contact-us"
     }
   ]
 ]);
 
-const navOptionsMobile = ref([
+const navOptionsMobile = [
   [
     {
       label: "Products list",
-      to: "/products"
+      to: "/products",
+      action: () => {
+        router.push("/products");
+      }
     },
     {
-      label: "About Us"
+      label: "About Us",
+      to: "/about-us",
+      action: () => {
+        router.push("/products");
+      }
     },
     {
-      label: "Contact Us"
+      label: "Contact Us",
+      to: "/contact-us",
+      action: () => {
+        router.push("/products");
+      }
     },
     {
       label: "User",
@@ -37,21 +54,35 @@ const navOptionsMobile = ref([
         {
           label: "Profile",
           icon: "i-lucide-user",
-          to: "profile/infor"
+          action: () => {
+            router.push("/profile/infor");
+          }
         },
         {
           label: "Wishlist",
           icon: "tabler:heart",
-          to: "profile/wishlist"
+          action: () => {
+            router.push("/profile/wishlist");
+          }
         },
         {
           label: "Logout",
-          icon: "material-symbols:logout-rounded"
+          icon: "material-symbols:logout-rounded",
+          action: () => logoutHandler()
         }
       ]
     }
   ]
-]);
+];
+
+const filteredNavOptionsItems = computed(() => {
+  return navOptionsMobile.map((group) =>
+    group.filter((item) => {
+      if (item.label === "User" && !authStoreToken.value) return false;
+      return true;
+    })
+  );
+});
 
 const userOptions = ref([
   {
@@ -66,15 +97,24 @@ const userOptions = ref([
   },
   {
     label: "Logout",
-    icon: "material-symbols:logout-rounded"
+    icon: "material-symbols:logout-rounded",
+    slot: "logout"
   }
 ]);
 
 const toggleNavMobile = ref(false);
 
+const toast = useToast();
+
 const toggleNavMobileHandler = (label) => {
   if (label === "User") return;
   toggleNavMobile.value = !toggleNavMobile.value;
+};
+
+const logoutHandler = () => {
+  authStore.logout();
+  router.push("/");
+  toast.add({ title: "Success", description: "Logout successfully", color: "success" });
 };
 </script>
 
@@ -107,30 +147,43 @@ const toggleNavMobileHandler = (label) => {
     </UNavigationMenu>
     <!-- Options -->
     <div class="flex gap-2">
-      <!-- User -->
-      <UDropdownMenu
-        :items="userOptions"
-        :content="{
-          sideOffset: 10
-        }"
-        :ui="{
-          content: 'w-36 z-50'
-        }"
-        class="hidden sm:block"
-      >
-        <UButton icon="mdi:user" size="md" color="neutral" variant="link" />
-      </UDropdownMenu>
-      <UButton
-        icon="mdi:cart"
-        size="md"
-        color="neutral"
-        variant="link"
-        @click="router.push('cart')"
-      >
-        <template #trailing>
-          <UBadge label="44" variant="subtle" size="sm" />
-        </template>
-      </UButton>
+      <UButton size="md" v-if="!authStoreToken" @click="router.push('auth/login')"> Login </UButton>
+      <div class="flex gap-2" v-else>
+        <!-- User -->
+        <UDropdownMenu
+          :items="userOptions"
+          :content="{
+            sideOffset: 10
+          }"
+          :ui="{
+            content: 'w-36 z-50'
+          }"
+          class="hidden sm:block"
+        >
+          <UButton icon="mdi:user" size="md" color="neutral" variant="link" />
+          <template #logout="{ item }">
+            <div class="flex gap-2">
+              <div v-if="item.icon" class="cursor-pointer">
+                <UIcon :name="item.icon" class="text-xl text-[#62748E]" />
+              </div>
+              <p @click="logoutHandler">
+                {{ item.label }}
+              </p>
+            </div>
+          </template>
+        </UDropdownMenu>
+        <UButton
+          icon="mdi:cart"
+          size="md"
+          color="neutral"
+          variant="link"
+          @click="router.push('cart')"
+        >
+          <template #trailing>
+            <UBadge label="44" variant="subtle" size="sm" />
+          </template>
+        </UButton>
+      </div>
       <UModal title="Search clothing...">
         <UButton icon="i-lucide-search" size="md" color="neutral" variant="link" />
         <template #body>
@@ -167,14 +220,24 @@ const toggleNavMobileHandler = (label) => {
     class="fixed top-22 right-0 left-0 z-10 border-b-1 border-[#ccc] bg-white p-2 shadow-md sm:hidden"
     v-if="toggleNavMobile"
   >
-    <UNavigationMenu :items="navOptionsMobile" orientation="vertical">
+    <UNavigationMenu :items="filteredNavOptionsItems" orientation="vertical">
       <template #item="{ item }">
-        <div v-if="item.icon" @click="handleClick(item.id)" class="cursor-pointer">
-          <UIcon :name="item.icon" class="text-xl" />
+        <div class="flex gap-2" @click="item.action()">
+          <div v-if="item.icon" class="cursor-pointer">
+            <UIcon :name="item.icon" class="text-xl" />
+          </div>
+          <p @click="toggleNavMobileHandler(item.label)">
+            {{ item.label }}
+          </p>
         </div>
-        <router-link :to="item.to" @click="toggleNavMobileHandler(item.label)">
-          {{ item.label }}
-        </router-link>
+      </template>
+      <template #user-content="{ item }">
+        <div class="flex gap-2" @click="item.action()">
+          <div v-if="item.icon" class="cursor-pointer">
+            <UIcon :name="item.icon" class="text-xl" />
+          </div>
+          <p>{{ item.label }}</p>
+        </div>
       </template>
     </UNavigationMenu>
   </div>

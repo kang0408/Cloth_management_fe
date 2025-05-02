@@ -16,6 +16,8 @@ import ChangePassword from "../pages/Auth/ChangePassword.vue";
 import Infor from "../components/Profile/Infor.vue";
 import Wishlist from "../components/Profile/Wishlist.vue";
 
+import { useAuthStore } from "../stores/User/auth.store";
+
 const routes = [
   {
     path: "/",
@@ -34,19 +36,27 @@ const routes = [
       {
         path: "cart",
         name: "Cart",
-        component: Cart
+        component: Cart,
+        meta: {
+          requiresAuth: true
+        }
       },
       {
         path: "profile",
         name: "Profile",
         component: Profile,
+        meta: {
+          requiresAuth: true
+        },
         children: [
           {
             path: "infor",
+            name: "Infor",
             component: Infor
           },
           {
             path: "wishlist",
+            name: "Wishlist",
             component: Wishlist
           }
         ]
@@ -75,7 +85,10 @@ const routes = [
       {
         path: "change-password",
         name: "Change Password",
-        component: ChangePassword
+        component: ChangePassword,
+        meta: {
+          requiresAuth: true
+        }
       }
     ]
   }
@@ -84,6 +97,19 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+});
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore();
+
+  if (!authStore.token && to.meta.requiresAuth)
+    return { name: "Login", query: { redirect: to.fullPath } };
+
+  if (to.name === "Login" && authStore.token) {
+    return { name: "Home" };
+  }
+
+  return true;
 });
 
 export default router;

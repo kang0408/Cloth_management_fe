@@ -78,7 +78,7 @@ const productList = ref([
 </script>
 <template>
   <div>
-    <p class="text-xl font-bold">My Profile</p>
+    <p class="text-xl font-bold">My Wishlist</p>
     <p class="text-gray border-gray mb-6 border-b-1 pb-4 text-xs">
       OMG! Look at this awesome wishlist!
     </p>
