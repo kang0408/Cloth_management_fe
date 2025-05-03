@@ -36,6 +36,15 @@ export const useAuthStore = defineStore("auth", {
         throw error;
       }
     },
+    async resetPassword(newPassword, verifyToken) {
+      try {
+        const res = await authService.resetPassword(newPassword, verifyToken);
+
+        return res;
+      } catch (error) {
+        throw error;
+      }
+    },
     logout() {
       this.token = null;
       Cookies.remove("access-token");

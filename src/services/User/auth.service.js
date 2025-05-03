@@ -26,3 +26,12 @@ export const changePassword = async (oldPassword, newPassword, verifyToken) => {
     throw error;
   }
 };
+
+export const resetPassword = async (newPassword, verifyToken) => {
+  try {
+    const res = await api.post("auth/reset-password", { newPassword, verifyToken });
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
