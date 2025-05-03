@@ -7,6 +7,7 @@ import Home from "../pages/Main/Home.vue";
 import Products from "../pages/Main/Products.vue";
 import Profile from "../pages/Main/Profile.vue";
 import Cart from "../pages/Main/Cart.vue";
+import ProductDetail from "../pages/Main/ProductDetail.vue";
 
 import Login from "../pages/Auth/Login.vue";
 import Register from "../pages/Auth/Register.vue";
@@ -32,6 +33,11 @@ const routes = [
         path: "products",
         name: "Products list",
         component: Products
+      },
+      {
+        path: "products/:id",
+        name: "Product Detail",
+        component: ProductDetail
       },
       {
         path: "cart",

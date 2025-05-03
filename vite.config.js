@@ -54,6 +54,11 @@ export default defineConfig({
               color: "neutral",
               variant: "outline",
               class: "pointer-cursor hover:ring-primary-500 hover:bg-primary-500 hover:text-white"
+            },
+            {
+              color: "neutral",
+              variant: "solid",
+              class: "border-2 font-medium border-black hover:bg-white hover:text-black"
             }
           ]
         },
