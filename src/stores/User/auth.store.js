@@ -18,11 +18,19 @@ export const useAuthStore = defineStore("auth", {
         throw error;
       }
     },
+    async register(username, email, password) {
+      try {
+        const data = await authService.register(username, email, password);
+
+        return data;
+      } catch (error) {
+        throw error;
+      }
+    },
     async changePassword(oldPassword, newPassword, verifyToken) {
       try {
         const data = await authService.changePassword(oldPassword, newPassword, verifyToken);
 
-        console.log(data);
         return data;
       } catch (error) {
         throw error;

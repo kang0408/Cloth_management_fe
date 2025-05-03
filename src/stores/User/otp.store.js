@@ -18,7 +18,6 @@ export const useOtpStore = defineStore("otp", {
       try {
         const res = await OtpService.verifyOtp(email, otp);
 
-        console.log(res);
         if (res) this.verifyToken = res.data.verifyToken;
         return res;
       } catch (error) {

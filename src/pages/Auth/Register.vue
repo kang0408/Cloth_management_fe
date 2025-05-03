@@ -1,28 +1,58 @@
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../../stores/User/auth.store";
 
+const authStore = useAuthStore();
 const router = useRouter();
 const state = reactive({
-  userName: undefined,
-  email: undefined,
-  password: undefined,
-  rePassword: undefined
+  username: "",
+  email: "",
+  password: "",
+  rePassword: ""
 });
+
+const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+const passwordRegex = /^(?=.*[0-9])(?=.*[A-Za-z])\S{8,}$/;
 
 const validate = (state) => {
   const errors = [];
-  if (!state.userName) errors.push({ name: "userName", message: "Required" });
+  if (!state.username) errors.push({ name: "username", message: "Required" });
+  if (state.username.length < 5)
+    errors.push({ name: "username", message: "Username is too short" });
+  if (state.username.length > 20)
+    errors.push({ name: "username", message: "Username exceeds 20 characters" });
+
   if (!state.email) errors.push({ name: "email", message: "Required" });
+  if (!gmailRegex.test(state.email)) errors.push({ name: "email", message: "Invalid email" });
+
   if (!state.password) errors.push({ name: "password", message: "Required" });
+  if (!passwordRegex.test(state.password))
+    errors.push({
+      name: "password",
+      message: "Password must be at least 8 characters long and contain both letters and numbers"
+    });
+
   if (!state.rePassword) errors.push({ name: "rePassword", message: "Required" });
+  if (!passwordRegex.test(state.rePassword))
+    errors.push({
+      name: "rePassword",
+      message: "Password must be at least 8 characters long and contain both letters and numbers"
+    });
+  if (state.rePassword !== state.password)
+    errors.push({ name: "rePassword", message: "Password is not match" });
+
   return errors;
 };
 
 const toast = useToast();
-async function onSubmit(event) {
-  toast.add({ title: "Success", description: "The form has been submitted.", color: "success" });
-  console.log(event.data);
+async function onSubmit() {
+  try {
+    const res = await authStore.register(state.username, state.email, state.password);
+    if (res.success) toast.add({ title: "Success", description: res.message, color: "success" });
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
+  }
 }
 </script>
 <template>
@@ -42,8 +72,8 @@ async function onSubmit(event) {
       There's lots of fun in Register.
     </p>
     <UForm :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
-      <UFormField label="User Name" name="userName">
-        <UInput v-model="state.userName" class="w-full" />
+      <UFormField label="User Name" name="username">
+        <UInput v-model="state.username" class="w-full" />
       </UFormField>
 
       <UFormField label="Email" name="email">

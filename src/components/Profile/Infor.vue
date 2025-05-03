@@ -39,7 +39,6 @@ async function onSubmit() {
 onMounted(() => {
   state.username = profile.value.username;
   state.email = profile.value.email;
-  console.log(userStore.profile);
 });
 </script>
 <template>
