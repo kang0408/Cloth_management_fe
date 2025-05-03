@@ -12,34 +12,38 @@ const router = useRouter();
 const state = reactive({
   oldPassword: undefined,
   newPassword: undefined,
-  rePassword: undefined
+  rePassword: undefined,
+  otp: undefined
 });
-const otp = ref(undefined);
 const step = ref(0);
 
 const passwordRegex = /^(?=.*[0-9])(?=.*[A-Za-z])\S{8,}$/;
 const validate = (state) => {
   const errors = [];
-  if (!state.oldPassword) errors.push({ name: "oldPassword", message: "Required" });
-  if (!passwordRegex.test(state.oldPassword))
-    errors.push({
-      name: "oldPassword",
-      message: "Password must be at least 8 characters long and contain both letters and numbers"
-    });
-  if (!state.newPassword) errors.push({ name: "newPassword", message: "Required" });
-  if (!passwordRegex.test(state.newPassword))
-    errors.push({
-      name: "newPassword",
-      message: "Password must be at least 8 characters long and contain both letters and numbers"
-    });
-  if (!state.rePassword) errors.push({ name: "rePassword", message: "Required" });
-  if (!passwordRegex.test(state.rePassword))
-    errors.push({
-      name: "rePassword",
-      message: "Password must be at least 8 characters long and contain both letters and numbers"
-    });
-  if (state.rePassword !== state.newPassword)
-    errors.push({ name: "rePassword", message: "Password is not match" });
+  if (step.value == 0) {
+    if (!state.oldPassword) errors.push({ name: "oldPassword", message: "Required" });
+    if (!passwordRegex.test(state.oldPassword))
+      errors.push({
+        name: "oldPassword",
+        message: "Password must be at least 8 characters long and contain both letters and numbers"
+      });
+    if (!state.newPassword) errors.push({ name: "newPassword", message: "Required" });
+    if (!passwordRegex.test(state.newPassword))
+      errors.push({
+        name: "newPassword",
+        message: "Password must be at least 8 characters long and contain both letters and numbers"
+      });
+    if (!state.rePassword) errors.push({ name: "rePassword", message: "Required" });
+    if (!passwordRegex.test(state.rePassword))
+      errors.push({
+        name: "rePassword",
+        message: "Password must be at least 8 characters long and contain both letters and numbers"
+      });
+    if (state.rePassword !== state.newPassword)
+      errors.push({ name: "rePassword", message: "Password is not match" });
+  } else if (step.value == 1) {
+    if (!state.otp || state.otp.length < 6) errors.push({ name: "otp", message: "Required" });
+  }
   return errors;
 };
 
@@ -48,6 +52,7 @@ async function onSubmit() {
   if (step.value == 0) {
     await userStore.getProfile();
     try {
+      toast.add({ title: "Success", description: "OTP is sending to email", color: "success" });
       const res = await otpStore.sendOtp(userStore.profile.email);
 
       if (res.success) {
@@ -59,7 +64,8 @@ async function onSubmit() {
     }
   } else if (step.value === 1) {
     try {
-      const res = await otpStore.verifyOtp(userStore.profile.email, otp.value.join(""));
+      toast.add({ title: "Success", description: "OTP is verifying...", color: "success" });
+      const res = await otpStore.verifyOtp(userStore.profile.email, state.otp.join(""));
 
       if (res.success) {
         toast.add({ title: "Success", description: res.message, color: "success" });
@@ -125,7 +131,7 @@ async function onSubmit() {
         <p class="text-xs">Enter your OTP</p>
         <UFormField name="otp">
           <UPinInput
-            v-model="otp"
+            v-model="state.otp"
             class="w-full justify-between"
             :ui="{ base: 'w-1/6 h-12' }"
             :length="6"
