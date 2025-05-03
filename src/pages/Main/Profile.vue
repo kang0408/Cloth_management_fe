@@ -2,15 +2,12 @@
 import { onMounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserStore } from "../../stores/User/user.store";
+import { storeToRefs } from "pinia";
 
 const userStore = useUserStore();
+const { profile } = storeToRefs(userStore);
 const route = useRoute();
 const router = useRouter();
-
-const user = reactive({
-  username: "none",
-  joined: "none"
-});
 
 const navLink = ref([
   {
@@ -40,11 +37,6 @@ onMounted(async () => {
     const res = await userStore.getProfile();
 
     if (res) {
-      user.username = userStore.profile.username;
-      user.joined = new Date(userStore.profile.createdAt).toISOString();
-
-      console.log(userStore.profile);
-
       toast.add({ title: "Success", description: res.message, color: "success" });
     }
   } catch (error) {
@@ -62,8 +54,13 @@ onMounted(async () => {
         <div class="border-gray h-24 w-24 rounded-full border-1 p-1">
           <img src="/home/cates/category-09.jpg" class="mx-auto h-full w-full rounded-full" />
         </div>
-        <p class="text-md mt-2 text-center font-bold">{{ user.username }}</p>
-        <p class="text-gray text-center text-xs">{{ user.joined }}</p>
+        <div v-if="profile">
+          <p class="text-md mt-2 text-center font-bold">{{ profile.username }}</p>
+          <p class="text-gray text-center text-xs">
+            {{ new Date(profile.createdAt).toISOString() }}
+          </p>
+        </div>
+        <p v-else>Đang tải dữ liệu...</p>
       </div>
       <ul class="border-gray border-t-1">
         <li
