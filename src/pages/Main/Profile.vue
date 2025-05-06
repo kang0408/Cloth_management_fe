@@ -9,6 +9,7 @@ const { profile } = storeToRefs(userStore);
 const route = useRoute();
 const router = useRouter();
 
+const defaultAvt = "/home/cates/category-09.jpg";
 const navLink = ref([
   {
     title: "Informations",
@@ -52,7 +53,10 @@ onMounted(async () => {
     <div class="border-gray h-fit w-full rounded-xs border-1 md:w-1/4">
       <div class="infor flex flex-col items-center p-6">
         <div class="border-gray h-24 w-24 rounded-full border-1 p-1">
-          <img src="/home/cates/category-09.jpg" class="mx-auto h-full w-full rounded-full" />
+          <img
+            :src="profile?.avatar ? profile.avatar : defaultAvt"
+            class="mx-auto h-full w-full rounded-full"
+          />
         </div>
         <div v-if="profile">
           <p class="text-md mt-2 text-center font-bold">{{ profile.username }}</p>
