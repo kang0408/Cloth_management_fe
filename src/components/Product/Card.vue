@@ -25,7 +25,7 @@ const toggleModalHandler = () => {
 
 const addWishlistHandler = async () => {
   try {
-    const res = await wishlistStore.addWishlist(props.id);
+    const res = await wishlistStore.addWishlist(props._id);
     if (res.success) {
       toast.add({ title: "Success", description: res.message, color: "success" });
     }
@@ -36,8 +36,8 @@ const addWishlistHandler = async () => {
 </script>
 <template>
   <div class="relative flex flex-col items-center gap-6 border-1 border-[#dfdfdf] p-4">
-    <div class="cursor-pointer border-b-1 border-[#dfdfdf] pb-4" @click="getDetail">
-      <img :src="props.thumbnail" class="mx-auto my-0 h-full w-full object-cover" />
+    <div class="max-h-42 w-full cursor-pointer border-b-1 border-[#dfdfdf] pb-4" @click="getDetail">
+      <img :src="props.thumbnail" class="mx-auto my-0 h-full w-full object-contain" />
     </div>
     <div>
       <p
