@@ -1,45 +1,32 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { useClothesStore } from "../../stores/User/clothes.store";
 
 import ProductCard from "../Product/Card.vue";
 
-const productList = ref([
-  {
-    title: "Smart Digital Watch",
-    price: 90.0,
-    img: "/home/featured/product-01.jpg"
-  },
-  {
-    title: "Desktop Speakers",
-    price: 29.0,
-    img: "/home/featured/product-02.jpg"
-  },
-  {
-    title: "Wireless Controller",
-    price: 55.0,
-    img: "/home/featured/product-03.jpg"
-  },
-  {
-    title: "Wireless Headset",
-    price: 28.0,
-    img: "/home/featured/product-04.jpg"
-  },
-  {
-    title: "Gear 360 Video Editor",
-    price: 88.0,
-    img: "/home/featured/product-06.jpg"
-  },
-  {
-    title: "USB Flash Drive",
-    price: 15.0,
-    img: "/home/featured/product-08.jpg"
-  },
-  {
-    title: "Mini Bluetooth Speaker",
-    price: 29.0,
-    img: "/home/featured/product-09.jpg"
+const clothesStore = useClothesStore();
+const productList = ref([]);
+const toast = useToast();
+
+const loadClothes = async () => {
+  try {
+    const res = await clothesStore.getClothes({
+      limit: 6,
+      page: 1,
+      sortBy: "price",
+      sortValue: "desc"
+    });
+    if (res.success) {
+      productList.value = clothesStore.clothes;
+    }
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
   }
-]);
+};
+
+onMounted(async () => {
+  await loadClothes();
+});
 </script>
 
 <template>
@@ -49,7 +36,7 @@ const productList = ref([
       <UCarousel
         v-slot="{ item }"
         :items="productList"
-        :ui="{ item: 'basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4', dots: '-bottom-10' }"
+        :ui="{ item: 'basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 h-96', dots: '-bottom-10' }"
         dots
       >
         <ProductCard v-bind="item" />
