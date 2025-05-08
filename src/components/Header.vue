@@ -1,10 +1,13 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/User/auth.store";
+import { useCartStore } from "../stores/User/cart.store";
 
 const authStore = useAuthStore();
+const cartStore = useCartStore();
+const { totalProduct } = storeToRefs(cartStore);
 const { token: authStoreToken } = storeToRefs(authStore);
 const router = useRouter();
 const navOptions = ref([
@@ -23,7 +26,6 @@ const navOptions = ref([
     }
   ]
 ]);
-
 const navOptionsMobile = [
   [
     {
@@ -74,7 +76,6 @@ const navOptionsMobile = [
     }
   ]
 ];
-
 const filteredNavOptionsItems = computed(() => {
   return navOptionsMobile.map((group) =>
     group.filter((item) => {
@@ -83,7 +84,6 @@ const filteredNavOptionsItems = computed(() => {
     })
   );
 });
-
 const userOptions = ref([
   {
     label: "Profile",
@@ -101,9 +101,7 @@ const userOptions = ref([
     slot: "logout"
   }
 ]);
-
 const toggleNavMobile = ref(false);
-
 const toast = useToast();
 
 const toggleNavMobileHandler = (label) => {
@@ -116,6 +114,10 @@ const logoutHandler = () => {
   router.push("/");
   toast.add({ title: "Success", description: "Logout successfully", color: "success" });
 };
+
+onMounted(async () => {
+  await cartStore.getCart();
+});
 </script>
 
 <template>
@@ -177,10 +179,10 @@ const logoutHandler = () => {
           size="md"
           color="neutral"
           variant="link"
-          @click="router.push('cart')"
+          @click="router.push({ name: 'Cart' })"
         >
           <template #trailing>
-            <UBadge label="44" variant="subtle" size="sm" />
+            <UBadge :label="totalProduct + ''" variant="subtle" size="sm" />
           </template>
         </UButton>
       </div>
