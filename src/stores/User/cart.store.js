@@ -22,6 +22,20 @@ export const useCartStore = defineStore("cart", {
         throw error;
       }
     },
+    async addCart(productId, quantity = 1) {
+      try {
+        const res = await cartService.addCart(productId, quantity);
+        if (res.success) {
+          this.products = res.data.items;
+          this.totalPrice = Number(res.data.totalPrice.toFixed(2));
+          this.totalProduct = res.data.items.length;
+        }
+        return res;
+      } catch (error) {
+        this.totalProduct = 0;
+        throw error;
+      }
+    },
     async removeCart(productId) {
       try {
         const res = await cartService.removeCart(productId);

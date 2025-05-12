@@ -27,6 +27,7 @@ export const useClothesStore = defineStore("clothes", {
     async getDetailCloth(productId) {
       try {
         const res = await clothesService.getDetailCloth(productId);
+        if (res.success) this.details = res.data;
         return res;
       } catch (error) {
         throw error;

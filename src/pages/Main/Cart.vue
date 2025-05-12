@@ -85,9 +85,7 @@ const actionCartHandler = async () => {
       if (res.success) {
         toast.add({ title: "Success", description: res.message, color: "success" });
       }
-      console.log(res);
     } catch (error) {
-      console.log(error);
       toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
     }
   } else {

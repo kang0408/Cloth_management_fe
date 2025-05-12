@@ -88,17 +88,21 @@ const userOptions = ref([
   {
     label: "Profile",
     icon: "i-lucide-user",
-    to: "profile/infor"
+    action: () => {
+      router.push("/profile/infor");
+    }
   },
   {
     label: "Wishlist",
     icon: "tabler:heart",
-    to: "profile/wishlist"
+    action: () => {
+      router.push("/profile/wishlist");
+    }
   },
   {
     label: "Logout",
     icon: "material-symbols:logout-rounded",
-    slot: "logout"
+    action: () => logoutHandler()
   }
 ]);
 const toggleNavMobile = ref(false);
@@ -163,12 +167,12 @@ onMounted(async () => {
           class="hidden sm:block"
         >
           <UButton icon="mdi:user" size="md" color="neutral" variant="link" />
-          <template #logout="{ item }">
+          <template #item="{ item }">
             <div class="flex gap-2">
               <div v-if="item.icon" class="cursor-pointer">
                 <UIcon :name="item.icon" class="text-xl text-[#62748E]" />
               </div>
-              <p @click="logoutHandler">
+              <p @click="item.action">
                 {{ item.label }}
               </p>
             </div>

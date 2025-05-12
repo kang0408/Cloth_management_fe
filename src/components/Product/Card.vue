@@ -2,8 +2,10 @@
 import { defineProps, defineEmits } from "vue";
 import { useRouter } from "vue-router";
 import { useWishlistStore } from "../../stores/User/wishlist.store";
+import { useCartStore } from "../../stores/User/cart.store";
 
 const wishlistStore = useWishlistStore();
+const cartStore = useCartStore();
 const router = useRouter();
 const props = defineProps({
   _id: String,
@@ -26,6 +28,17 @@ const toggleModalHandler = () => {
 const addWishlistHandler = async () => {
   try {
     const res = await wishlistStore.addWishlist(props._id);
+    if (res.success) {
+      toast.add({ title: "Success", description: res.message, color: "success" });
+    }
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
+  }
+};
+
+const addCartHandler = async () => {
+  try {
+    const res = await cartStore.addCart(props._id);
     if (res.success) {
       toast.add({ title: "Success", description: res.message, color: "success" });
     }
@@ -67,6 +80,7 @@ const addWishlistHandler = async () => {
         variant="outline"
         class="rounded-xs font-medium"
         v-if="!props.wishlist"
+        @click="addCartHandler"
         >Add to Cart</UButton
       >
     </div>
