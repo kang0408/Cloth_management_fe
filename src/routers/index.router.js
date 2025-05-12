@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import MainLayout from "../layouts/MainLayout.vue";
 import AuthLayout from "../layouts/AuthLayout.vue";
+import AdminLayout from "../layouts/AdminLayout.vue";
 
 import Home from "../pages/Main/Home.vue";
 import Products from "../pages/Main/Products.vue";
@@ -16,6 +17,10 @@ import ChangePassword from "../pages/Auth/ChangePassword.vue";
 
 import Infor from "../components/Profile/Infor.vue";
 import Wishlist from "../components/Profile/Wishlist.vue";
+
+import Dashboard from "../pages/Admin/Dashboard.vue";
+import AdminProducts from "../pages/Admin/Products.vue";
+import Users from "../pages/Admin/Users.vue";
 
 import { useAuthStore } from "../stores/User/auth.store";
 
@@ -95,6 +100,30 @@ const routes = [
         meta: {
           requiresAuth: true
         }
+      }
+    ]
+  },
+  {
+    path: "/admin",
+    // meta: {
+    //   requiresAuth: true
+    // },
+    component: AdminLayout,
+    children: [
+      {
+        path: "dashboard",
+        name: "Dashboard",
+        component: Dashboard
+      },
+      {
+        path: "products",
+        name: "Products",
+        component: AdminProducts
+      },
+      {
+        path: "users",
+        name: "Users",
+        component: Users
       }
     ]
   }
