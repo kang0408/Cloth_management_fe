@@ -120,7 +120,11 @@ const logoutHandler = () => {
 };
 
 onMounted(async () => {
-  await cartStore.getCart();
+  try {
+    await cartStore.getCart();
+  } catch (error) {
+    console.error(error);
+  }
 });
 </script>
 

@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 import Cookies from "js-cookie";
 import * as authService from "../../services/User/auth.service";
+import * as userService from "../../services/User/user.service";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    token: Cookies.get("access-token") || null
+    token: Cookies.get("access-token") || null,
+    role: null
   }),
   actions: {
     async login(email, password) {
@@ -12,6 +14,7 @@ export const useAuthStore = defineStore("auth", {
         const data = await authService.login(email, password);
         if (data) {
           this.token = data.data.accessToken;
+          this.token = data.data.role;
           Cookies.set("access-token", data.data.accessToken);
         }
       } catch (error) {
@@ -41,6 +44,17 @@ export const useAuthStore = defineStore("auth", {
         const res = await authService.resetPassword(newPassword, verifyToken);
 
         return res;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async getProfile() {
+      try {
+        const data = await userService.getProfile();
+
+        if (data) this.role = data.data.role;
+
+        return data;
       } catch (error) {
         throw error;
       }

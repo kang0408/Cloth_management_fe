@@ -105,9 +105,10 @@ const routes = [
   },
   {
     path: "/admin",
-    // meta: {
-    //   requiresAuth: true
-    // },
+    meta: {
+      requiresAuth: true,
+      requiresRole: "admin"
+    },
     component: AdminLayout,
     children: [
       {
@@ -134,11 +135,19 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const authStore = useAuthStore();
+
+  if (authStore.token && !authStore.role) {
+    await authStore.getProfile();
+  }
 
   if (!authStore.token && to.meta.requiresAuth)
     return { name: "Login", query: { redirect: to.fullPath } };
+
+  if (to.meta.requiresRole && to.meta.requiresRole !== authStore.role) {
+    return { name: "Home" };
+  }
 
   if (to.name === "Login" && authStore.token) {
     return { name: "Home" };
