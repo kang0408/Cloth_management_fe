@@ -26,7 +26,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       if (error.response.status === 401) {
-        router.push("/auth/login");
+        // router.push("/auth/login");
         console.log("Unauthorized");
       }
     }
