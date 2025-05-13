@@ -21,7 +21,7 @@ import Sidebar from "../components/Admin/Sidebar.vue";
           </div>
         </div>
       </div>
-      <div class="main h-screen bg-[#F3F4F7] p-6">
+      <div class="main bg-[#F3F4F7] p-6">
         <router-view></router-view>
       </div>
     </div>
