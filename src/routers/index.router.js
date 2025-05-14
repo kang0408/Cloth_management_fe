@@ -19,8 +19,11 @@ import Infor from "../components/Profile/Infor.vue";
 import Wishlist from "../components/Profile/Wishlist.vue";
 
 import Dashboard from "../pages/Admin/Dashboard.vue";
-import AdminProducts from "../pages/Admin/Products.vue";
+import IndexProducts from "../pages/Admin/Products/Index.vue";
+import AdminProducts from "../pages/Admin/Products/Products.vue";
 import Users from "../pages/Admin/Users.vue";
+import Create from "../pages/Admin/Products/Create.vue";
+import Edit from "../pages/Admin/Products/Edit.vue";
 
 import { useAuthStore } from "../stores/User/auth.store";
 
@@ -118,9 +121,27 @@ const routes = [
       },
       {
         path: "products",
-        name: "Products",
-        component: AdminProducts
+        name: "Index Products",
+        component: IndexProducts,
+        children: [
+          {
+            path: "",
+            name: "Products",
+            component: AdminProducts
+          },
+          {
+            path: "create",
+            name: "Create product",
+            component: Create
+          },
+          {
+            path: "edit/:id",
+            name: "Edit product",
+            component: Edit
+          }
+        ]
       },
+
       {
         path: "users",
         name: "Users",

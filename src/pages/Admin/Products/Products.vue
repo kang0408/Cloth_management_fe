@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted, watch, h, resolveComponent } from "vue";
-import { useClothesStore } from "../../stores/User/clothes.store";
+import { useRouter } from "vue-router";
+import { useClothesStore } from "../../../stores/User/clothes.store";
 
 const UBadge = resolveComponent("UBadge");
 
 const clothesStore = useClothesStore();
+const router = useRouter();
 
 const sortByItems = ref([
   {
@@ -146,15 +148,20 @@ watch(searchString, (newVal) => {
     />
     <UButton class="rounded-r-xl" @click="loadClothes">Search</UButton>
   </div>
-  <div class="mb-4 flex items-start gap-2">
-    <div class="flex flex-row items-center gap-1">
-      <p>Sort By:</p>
-      <USelect v-model="sortBy" value-key="id" :items="sortByItems" class="w-fit" />
+  <div class="mb-4 flex items-start justify-between">
+    <div class="flex items-start gap-2">
+      <div class="flex flex-row items-center gap-1">
+        <p>Sort By:</p>
+        <USelect v-model="sortBy" value-key="id" :items="sortByItems" class="w-fit" />
+      </div>
+      <div class="flex flex-row items-center gap-1">
+        <p>Sort Value:</p>
+        <USelect v-model="sortValue" value-key="id" :items="sortValueItems" class="w-fit" />
+      </div>
     </div>
-    <div class="flex flex-row items-center gap-1">
-      <p>Sort Value:</p>
-      <USelect v-model="sortValue" value-key="id" :items="sortValueItems" class="w-fit" />
-    </div>
+    <UButton class="rounded-xl" icon="ic:baseline-plus" @click="router.push('products/create')"
+      >Create</UButton
+    >
   </div>
   <UTable
     :loading="loading"
@@ -180,11 +187,11 @@ watch(searchString, (newVal) => {
     <template #action-cell="{ row }">
       <div>
         <UButton
-          icon="solar:pen-bold"
+          icon="mdi:eye"
           color="neutral"
           variant="ghost"
           aria-label="Actions"
-          @click="toggleModalHandler('remove', row.original.productId._id)"
+          @click="router.push(`products/edit/${row.original._id}`)"
         />
         <UButton
           icon="streamline:recycle-bin-2-solid"
