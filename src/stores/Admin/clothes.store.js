@@ -11,9 +11,9 @@ export const useAdminClothesStore = defineStore("admin-clothes", {
         throw error;
       }
     },
-    async editCloth(formData) {
+    async editCloth(productId, formData) {
       try {
-        const res = await clothesServiceAdmin.editCloth(formData);
+        const res = await clothesServiceAdmin.editCloth(productId, formData);
         return res;
       } catch (error) {
         throw error;
@@ -22,6 +22,14 @@ export const useAdminClothesStore = defineStore("admin-clothes", {
     async deleteCloth(productId) {
       try {
         const res = await clothesServiceAdmin.deleteCloth(productId);
+        return res;
+      } catch (error) {
+        throw error;
+      }
+    },
+    async getDetailCloth(productId) {
+      try {
+        const res = await clothesServiceAdmin.getDetailCloth(productId);
         return res;
       } catch (error) {
         throw error;

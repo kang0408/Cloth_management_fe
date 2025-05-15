@@ -13,9 +13,9 @@ export const createCloth = async (formData) => {
   }
 };
 
-export const editCloth = async (formData) => {
+export const editCloth = async (productId, formData) => {
   try {
-    const res = await api.post("/clothes/edit", formData, {
+    const res = await api.patch(`/clothes/edit/${productId}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data"
       }
