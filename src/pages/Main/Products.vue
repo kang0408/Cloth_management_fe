@@ -32,8 +32,8 @@ const itemsPerPageValue = ref(10);
 const currentPage = ref(1);
 const totalPages = ref(1);
 const totalClothes = ref(1);
-const sortBy = ref("price");
-const sortValue = ref("asc");
+const sortBy = ref("updatedAt");
+const sortValue = ref("desc");
 const searchString = ref("");
 
 const productList = ref([]);
