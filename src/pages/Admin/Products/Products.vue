@@ -2,10 +2,12 @@
 import { ref, onMounted, watch, h, resolveComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useClothesStore } from "../../../stores/User/clothes.store";
+import { useAdminClothesStore } from "../../../stores/Admin/clothes.store";
 
 const UBadge = resolveComponent("UBadge");
 
 const clothesStore = useClothesStore();
+const adminClothesStore = useAdminClothesStore();
 const router = useRouter();
 
 const sortByItems = ref([
@@ -93,6 +95,14 @@ const loading = ref(true);
 const productList = ref([]);
 const toast = useToast();
 
+const toggleModal = ref(false);
+const deletedClothId = ref("");
+
+const toggleModalHandler = (id) => {
+  toggleModal.value = !toggleModal.value;
+  deletedClothId.value = id;
+};
+
 const loadClothes = async () => {
   loading.value = true;
   try {
@@ -117,6 +127,19 @@ const loadClothes = async () => {
     toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
     loading.value = false;
   }
+};
+
+const deleteClothHandler = async () => {
+  try {
+    const res = await adminClothesStore.deleteCloth(deletedClothId.value);
+    if (res.success) {
+      toast.add({ title: "Success", description: res.message, color: "success" });
+      await loadClothes();
+    }
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
+  }
+  toggleModal.value = !toggleModal.value;
 };
 
 onMounted(async () => {
@@ -198,7 +221,7 @@ watch(searchString, (newVal) => {
           color="neutral"
           variant="ghost"
           aria-label="Actions"
-          @click="toggleModalHandler('remove', row.original.productId._id)"
+          @click="toggleModalHandler(row.original._id)"
         />
       </div>
     </template>
@@ -218,4 +241,25 @@ watch(searchString, (newVal) => {
     />
     <USelect v-model="itemsPerPageValue" :items="itemsPerPage" />
   </div>
+  <UModal
+    title="You really want to delete this cloth?"
+    v-model:open="toggleModal"
+    class="w-1/3"
+    :ui="{
+      header: 'w-4/5'
+    }"
+  >
+    <template #body>
+      <div class="flex gap-4">
+        <UButton
+          color="neutral"
+          label="Do it!"
+          variant="solid"
+          class="w-full rounded-xs"
+          @click="deleteClothHandler()"
+        />
+        <UButton label="Hmmm..." class="w-full rounded-xs" @click="toggleModal = !toggleModal" />
+      </div>
+    </template>
+  </UModal>
 </template>
