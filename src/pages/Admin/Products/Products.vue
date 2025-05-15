@@ -22,6 +22,10 @@ const sortByItems = ref([
   {
     label: "Stock",
     id: "stock"
+  },
+  {
+    label: "Updated Time",
+    id: "updatedAt"
   }
 ]);
 const sortValueItems = ref([
