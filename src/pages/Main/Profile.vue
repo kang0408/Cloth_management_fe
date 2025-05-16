@@ -52,10 +52,10 @@ onMounted(async () => {
   >
     <div class="border-gray h-fit w-full rounded-xs border-1 md:w-1/4">
       <div class="infor flex flex-col items-center p-6">
-        <div class="border-gray h-24 w-24 rounded-full border-1 p-1">
+        <div class="border-gray h-40 w-40 rounded-full border-1 p-1">
           <img
             :src="profile?.avatar ? profile.avatar : defaultAvt"
-            class="mx-auto h-full w-full rounded-full"
+            class="mx-auto h-full w-full rounded-full object-cover"
           />
         </div>
         <div v-if="profile">
