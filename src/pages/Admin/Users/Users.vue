@@ -227,7 +227,7 @@ watch(searchString, (newVal) => {
     <USelect v-model="itemsPerPageValue" :items="itemsPerPage" />
   </div>
   <UModal
-    title="You really want to delete this cloth?"
+    title="You really want to delete this user?"
     v-model:open="toggleModal"
     class="w-1/3"
     :ui="{
