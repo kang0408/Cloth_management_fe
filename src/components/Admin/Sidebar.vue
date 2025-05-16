@@ -14,6 +14,11 @@ const navItems = [
     label: "Users",
     icon: "lucide:users",
     to: "/admin/users"
+  },
+  {
+    label: "Categories",
+    icon: "tabler:category",
+    to: "/admin/categories"
   }
 ];
 </script>

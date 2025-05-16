@@ -27,6 +27,7 @@ import IndexUsers from "../pages/Admin/Users/Index.vue";
 import AdminUsers from "../pages/Admin/Users/Users.vue";
 import CreateUser from "../pages/Admin/Users/Create.vue";
 import EditUser from "../pages/Admin/Users/Edit.vue";
+import Categories from "../pages/Admin/Categories.vue";
 
 import { useAuthStore } from "../stores/User/auth.store";
 
@@ -144,7 +145,6 @@ const routes = [
           }
         ]
       },
-
       {
         path: "users",
         name: "Index Users",
@@ -166,6 +166,11 @@ const routes = [
             component: EditUser
           }
         ]
+      },
+      {
+        path: "categories",
+        name: "Categories",
+        component: Categories
       }
     ]
   }
