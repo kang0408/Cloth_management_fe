@@ -122,7 +122,7 @@ onMounted(async () => {
         <UInput :disabled="action" v-model="user.email" class="w-full" />
       </UFormField>
 
-      <UFormField label="Status" name="role">
+      <UFormField label="Role" name="role">
         <USelect :disabled="action" v-model="user.role" :items="selectRole" class="w-full" />
       </UFormField>
     </div>
