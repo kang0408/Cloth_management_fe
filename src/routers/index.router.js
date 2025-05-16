@@ -21,9 +21,12 @@ import Wishlist from "../components/Profile/Wishlist.vue";
 import Dashboard from "../pages/Admin/Dashboard.vue";
 import IndexProducts from "../pages/Admin/Products/Index.vue";
 import AdminProducts from "../pages/Admin/Products/Products.vue";
-import Users from "../pages/Admin/Users.vue";
-import Create from "../pages/Admin/Products/Create.vue";
-import Edit from "../pages/Admin/Products/Edit.vue";
+import CreateProduct from "../pages/Admin/Products/Create.vue";
+import EditProduct from "../pages/Admin/Products/Edit.vue";
+import IndexUsers from "../pages/Admin/Users/Index.vue";
+import AdminUsers from "../pages/Admin/Users/Users.vue";
+import CreateUser from "../pages/Admin/Users/Create.vue";
+import EditUser from "../pages/Admin/Users/Edit.vue";
 
 import { useAuthStore } from "../stores/User/auth.store";
 
@@ -132,20 +135,37 @@ const routes = [
           {
             path: "create",
             name: "Create product",
-            component: Create
+            component: CreateProduct
           },
           {
             path: "edit/:id",
             name: "Edit product",
-            component: Edit
+            component: EditProduct
           }
         ]
       },
 
       {
         path: "users",
-        name: "Users",
-        component: Users
+        name: "Index Users",
+        component: IndexUsers,
+        children: [
+          {
+            path: "",
+            name: "Users",
+            component: AdminUsers
+          },
+          {
+            path: "create",
+            name: "Create user",
+            component: CreateUser
+          },
+          {
+            path: "edit/:id",
+            name: "Edit user",
+            component: EditUser
+          }
+        ]
       }
     ]
   }
