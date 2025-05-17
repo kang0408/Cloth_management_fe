@@ -76,9 +76,11 @@ const columns = [
 ];
 
 const cate = reactive({
+  id: "",
   name: "",
   description: "",
-  status: "active"
+  status: "active",
+  parentId: [null]
 });
 
 const expanded = ref();
@@ -93,11 +95,78 @@ const catesList = ref([]);
 const toast = useToast();
 
 const toggleModal = ref(false);
-const deletedClothId = ref("");
+const deletedCateId = ref("");
 
 const toggleModalHandler = (id) => {
   toggleModal.value = !toggleModal.value;
-  deletedClothId.value = id;
+  deletedCateId.value = id;
+};
+
+const selectCate = ref([
+  {
+    label: "No category",
+    value: null
+  }
+]);
+
+const getAllCates = async () => {
+  const res = await cateStore.getAllCates();
+  if (res.success) {
+    res.data.forEach((cate) => {
+      selectCate.value.push({
+        label: cate.name,
+        value: cate._id
+      });
+    });
+  }
+};
+
+const refreshCate = () => {
+  cate.id = "";
+  cate.name = "";
+  cate.description = "";
+  cate.status = "active";
+  cate.parentId = [null];
+};
+
+const getDetailCate = (row) => {
+  cate.name = row.original.name;
+  cate.description = row.original.description;
+  cate.status = row.original.status;
+  if (row.original.parentId.length > 0) {
+    cate.parentId = row.original.parentId.map((id) => {
+      if (id != undefined || id != null) return id;
+    });
+  } else cate.parentId = [null];
+  cate.id = row.original._id;
+};
+
+const editCate = async () => {
+  try {
+    const { name, description, status, parentId, id: cateId } = cate;
+    const res = await cateStore.editCate(cateId, { name, description, status, parentId });
+    if (res.success) {
+      toast.add({ title: "Success", description: res.message, color: "success" });
+      refreshCate();
+      await loadCates();
+    }
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
+  }
+};
+
+const createCate = async () => {
+  try {
+    const { name, description, status, parentId } = cate;
+    const res = await cateStore.createCate({ name, description, status, parentId });
+    if (res.success) {
+      toast.add({ title: "Success", description: res.message, color: "success" });
+      refreshCate();
+      await loadCates();
+    }
+  } catch (error) {
+    toast.add({ title: "Failure", description: error?.response?.data?.message, color: "error" });
+  }
 };
 
 const loadCates = async () => {
@@ -113,6 +182,8 @@ const loadCates = async () => {
       currentPage.value = res.data.currentPage;
       totalCates.value = res.data.totalCates;
 
+      await getAllCates();
+
       loading.value = false;
 
       toast.add({ title: "Success", description: res.message, color: "success" });
@@ -126,12 +197,13 @@ const loadCates = async () => {
 const validate = (cate) => {
   const errors = [];
   if (!cate.name) errors.push({ name: "name", message: "Category name is required" });
+  if (!cate.description) errors.push({ name: "description", message: "Description is required" });
   return errors;
 };
 
-const deleteClothHandler = async () => {
+const deleteCate = async () => {
   try {
-    const res = await adminClothesStore.deleteCloth(deletedClothId.value);
+    const res = await cateStore.deleteCate(deletedCateId.value);
     if (res.success) {
       toast.add({ title: "Success", description: res.message, color: "success" });
       await loadCates();
@@ -177,7 +249,7 @@ watch([itemsPerPageValue, currentPage], loadCates);
                   color="neutral"
                   variant="ghost"
                   aria-label="Actions"
-                  @click="router.push(`products/edit/${row.original._id}`)"
+                  @click="getDetailCate(row)"
                 />
                 <UButton
                   icon="streamline:recycle-bin-2-solid"
@@ -190,19 +262,6 @@ watch([itemsPerPageValue, currentPage], loadCates);
             </template>
           </UTable>
         </template>
-        <template #title-cell="{ row }">
-          <div class="flex items-center gap-3">
-            <div class="h-20 w-20">
-              <img
-                :src="row.original ? row.original.thumbnail : ''"
-                class="h-full w-full object-cover"
-              />
-            </div>
-            <p class="text-highlighted font-medium">
-              {{ row.original ? row.original.title : "" }}
-            </p>
-          </div>
-        </template>
         <template #action-cell="{ row }">
           <div>
             <UButton
@@ -210,7 +269,7 @@ watch([itemsPerPageValue, currentPage], loadCates);
               color="neutral"
               variant="ghost"
               aria-label="Actions"
-              @click="router.push(`products/edit/${row.original._id}`)"
+              @click="getDetailCate(row)"
             />
             <UButton
               icon="streamline:recycle-bin-2-solid"
@@ -239,26 +298,28 @@ watch([itemsPerPageValue, currentPage], loadCates);
       </div>
     </div>
     <UForm :validate="validate" :state="cate" class="flex flex-col space-y-4">
-      <UFormField label="Category name" name="name">
+      <UFormField label="Category name" name="name" required>
         <UInput v-model="cate.name" class="w-full" />
       </UFormField>
-
-      <UFormField label="Description" name="description">
+      <UFormField label="Description" name="description" required>
         <UTextarea v-model="cate.description" :rows="8" class="w-full" />
       </UFormField>
-
       <UFormField label="Status" name="status">
         <USelect v-model="cate.status" :items="selectStatus" class="w-full" />
       </UFormField>
+      <UFormField label="Category" name="parentId">
+        <USelect v-model="cate.parentId" multiple :items="selectCate" class="w-full" />
+      </UFormField>
       <div class="flex gap-4">
-        <UButton type="submit" class="w-full justify-center rounded-md lg:w-fit"> Create </UButton>
-        <UButton type="submit" class="w-full justify-center rounded-md lg:w-fit"> Edit </UButton>
         <UButton
-          color="neutral"
+          type="submit"
           class="w-full justify-center rounded-md lg:w-fit"
-          @click="router.push('/admin/users')"
+          @click="createCate"
         >
-          Cancel
+          Create
+        </UButton>
+        <UButton type="submit" class="w-full justify-center rounded-md lg:w-fit" @click="editCate">
+          Edit
         </UButton>
       </div>
     </UForm>
@@ -278,7 +339,7 @@ watch([itemsPerPageValue, currentPage], loadCates);
           label="Do it!"
           variant="solid"
           class="w-full rounded-xs"
-          @click="deleteClothHandler()"
+          @click="deleteCate()"
         />
         <UButton label="Hmmm..." class="w-full rounded-xs" @click="toggleModal = !toggleModal" />
       </div>
